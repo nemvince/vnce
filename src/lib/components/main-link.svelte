@@ -1,0 +1,1 @@
+<a href="/"> <span class="font-bold text-accent">vnce</span>.eu</a>

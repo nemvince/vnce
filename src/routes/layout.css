@@ -1,0 +1,148 @@
+@import 'tailwindcss';
+@import './typeset.css';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+    --border: #e5e7eb;
+    --bg: #f8f7f4;
+    --fg: #1a1f2e;
+    --muted: #6b7280;
+    --accent: #64755f;
+}
+
+.dark {
+    --border: #2a2a2a;
+    --bg: #0a0a0a;
+    --fg: #f5f5f5;
+    --muted: #a0a0a0;
+    --accent: #7c9082;
+}
+
+@theme {
+    --color-border: var(--border);
+    --color-bg: var(--bg);
+    --color-fg: var(--fg);
+    --color-muted: var(--muted);
+    --color-accent: var(--accent);
+}
+
+@layer base {
+  *,
+  ::before,
+  ::after {
+    @apply border-border;
+  }
+  html {
+    @apply scroll-smooth;
+  }
+  body {
+    @apply bg-bg text-fg transition-colors duration-500;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-accent;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* shiki dual theme: vitesse-light/vitesse-dark via css vars.
+   Background lives on the pre only; spans carry token colors. */
+.shiki {
+  background-color: var(--shiki-light-bg) !important;
+}
+.shiki span {
+  color: var(--shiki-light);
+  background-color: transparent;
+}
+.dark .shiki {
+  background-color: var(--shiki-dark-bg) !important;
+}
+.dark .shiki span {
+  color: var(--shiki-dark);
+}
+
+.typeset .code-block {
+  position: relative;
+  border: 1px solid var(--color-border);
+  border-radius: 0.5em;
+  overflow: hidden;
+}
+.typeset .code-block pre {
+  margin-block-start: 0;
+  border-radius: 0;
+  padding: 1em 1.25em !important;
+  overflow-x: auto;
+}
+/* filename bar sits inside the pre; strip the pre's own padding so it's flush.
+   Horizontal scroll moves to the code element below the bar. */
+.typeset .code-block pre:has(.code-filename) {
+  padding: 0 !important;
+  overflow-x: hidden;
+}
+.typeset .code-block pre:has(.code-filename) code {
+  display: block;
+  overflow-x: auto;
+  padding: 1em 1.25em;
+}
+/* line numbers via counter — unselectable (absolutely positioned gutter) */
+.typeset .code-block pre.numbered code {
+  counter-reset: line;
+  padding-left: 3.25em;
+}
+.typeset .code-block pre.numbered .line {
+  position: relative;
+  counter-increment: line;
+}
+.typeset .code-block pre.numbered .line::before {
+  content: counter(line);
+  position: absolute;
+  left: -3.25em;
+  width: 2.5em;
+  text-align: right;
+  color: color-mix(in oklab, var(--color-muted) 55%, transparent);
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+  user-select: none;
+}
+.code-filename {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.8em;
+  color: var(--color-muted);
+  padding: 0.6em 1.25em 0.6em 1.6em;
+  border-bottom: 1px solid var(--color-border);
+  background-color: color-mix(in oklab, var(--color-muted) 8%, transparent);
+}
+.code-loc {
+  color: color-mix(in oklab, var(--color-muted) 65%, transparent);
+  font-size: 0.9em;
+  font-variant-numeric: tabular-nums;
+  margin-right: 2em;
+}
+.code-copy {
+  position: absolute;
+  top: 0.5em;
+  right: 0.5em;
+color: var(--color-muted);  padding: 0.25em;
+  border-radius: 0.25em;
+  cursor: pointer;
+  transition: opacity 0.15s, color 0.15s;
+}
+
+.code-copy.copied {
+  color: var(--color-accent);
+  opacity: 1;
+}
