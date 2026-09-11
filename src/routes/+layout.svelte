@@ -39,7 +39,6 @@
 </svelte:head>
 <Header />
 {#key pathname}
-
 	<main in:fade={{ easing: cubicOut, duration: 150, delay: 250 }}
 		out:fade={{ easing: cubicIn, duration: 150 }} class="grow flex flex-col">{@render children()}</main>
 {/key}

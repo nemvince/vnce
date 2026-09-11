@@ -8,6 +8,8 @@
     import MailboxIcon from "phosphor-svelte/lib/MailboxIcon";
     import GithubLogoIcon from "phosphor-svelte/lib/GithubLogoIcon";
     import Heatmap from "$lib/components/heatmap.svelte";
+    import Eyes from '$lib/components/eyes.svelte';
+    import { reveal } from '$lib/utils/reveal';
 
     let { data }: { data: PageData } = $props();
     const contributions = $derived(data.contributions);
@@ -85,8 +87,11 @@
 </script>
 
 <div class="mx-auto w-full max-w-2xl px-6 flex flex-col">
+    <!-- sick ass ascii eyes -->
+    <Eyes />
+
     <!-- intro -->
-    <section class="pt-20 pb-16">
+    <section class="pb-16 intro-fade">
         <h1 class="text-3xl font-bold tracking-tight mb-6">tamás vince</h1>
         <p class="text-lg leading-relaxed mb-4">
             i'm an <em>it student</em> in budapest — systems technician and
@@ -102,7 +107,7 @@
     </section>
 
     <!-- projects -->
-    <section id="projects" class="py-16 border-t border-border/60">
+    <section id="projects" class="py-16 border-t border-border/60" use:reveal>
         <h2 class="text-sm text-muted font-normal mb-8">things i've built</h2>
         <div class="flex flex-col gap-10">
             {#each projects as p (p.name)}
@@ -123,7 +128,9 @@
     </section>
 
     <!-- experience + competitions -->
-    <section class="py-16 border-t border-border/60 flex flex-col lg:flex-row lg:gap-6 gap-4">
+    <section
+        class="py-16 border-t border-border/60 flex flex-col lg:flex-row lg:gap-6 gap-4"
+        use:reveal>
         <div class="flex-1 flex flex-col gap-2">
             <h2 class="text-sm text-muted font-normal mb-2">where i've worked</h2>
             {#each work as e, i (`w${i}`)}
@@ -151,7 +158,7 @@
     </section>
 
     <!-- about -->
-    <section class="py-16 border-t border-border/60">
+    <section class="py-16 border-t border-border/60" use:reveal>
         <h2 class="text-sm text-muted font-normal mb-8">about</h2>
         <div class="flex flex-col md:flex-row gap-10">
             <p class="text-lg leading-relaxed flex-1">
@@ -188,7 +195,7 @@
     </section>
 
     <!-- github -->
-    <section class="py-16 border-t border-border/60">
+    <section class="py-16 border-t border-border/60" use:reveal>
         <h2 class="text-sm text-muted font-normal mb-8">commits, publicly</h2>
         <ExternalLink href="https://github.com/nemvince" class="block">
             <Heatmap data={contributions} />
@@ -196,7 +203,7 @@
     </section>
 
     <!-- writing -->
-    <section class="py-16 border-t border-border/60">
+    <section class="py-16 border-t border-border/60" use:reveal>
         <h2 class="text-sm text-muted font-normal mb-8">words i've written</h2>
         <p class="text-lg leading-relaxed">
             occasionally i write things down so i don't forget them —
@@ -207,3 +214,25 @@
         </p>
     </section>
 </div>
+
+<style>
+    /* Intro: the eyes land first (they own their own entrance), then the first
+       block of copy. Css rather than a svelte transition — those only play for
+       client-created nodes, so they'd never fire on the first paint of the
+       ssr'd page. Sections below the fold reveal on scroll instead (use:reveal). */
+    .intro-fade {
+        animation: content-in 450ms cubic-bezier(0.215, 0.61, 0.355, 1) 550ms both;
+    }
+
+    @keyframes content-in {
+        from {
+            opacity: 0;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .intro-fade {
+            animation: none;
+        }
+    }
+</style>
