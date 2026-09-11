@@ -38,6 +38,9 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
+      - name: Set up .env
+        run: cp .env.example .env
+
       - name: Check formatting
         run: bun run format:check
 
