@@ -7,7 +7,7 @@
     const email = atob(EMAIL_B64);
 
     let copied = $state(false);
-    let copyTimeout: ReturnType<typeof setTimeout>;
+    let copyTimeout: ReturnType<typeof setTimeout> | undefined = undefined;
     let bounce = $state(false);
 
     const copy = async () => {
@@ -20,7 +20,7 @@
                 copied = false;
                 bounce = false;
             }, 1500);
-        } catch { /* clipboard unavailable */ }
+        } catch { /* Clipboard unavailable */ }
     };
 </script>
 

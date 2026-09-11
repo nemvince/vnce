@@ -14,74 +14,74 @@
 
     const projects = [
         {
-            name: 'filc',
-            year: '2024',
-            tags: 'typescript · react · iot',
             desc: 'timetable and substitution manager for my school, plus an IoT door lock for classrooms. open source.',
             href: 'https://github.com/filcdev/filc',
+            name: 'filc',
+            tags: 'typescript · react · iot',
+            year: '2024',
         },
         {
-            name: 'petriktv',
-            year: '2024',
-            tags: 'typescript · kiosk · gtfs',
             desc: "a screen in the school hall showing daily substitutions and live public transport times, via BKK's GTFS feed.",
             href: 'https://github.com/nemvince/petriktv',
+            name: 'petriktv',
+            tags: 'typescript · kiosk · gtfs',
+            year: '2024',
         },
         {
-            name: 'axi',
-            year: '2026',
-            tags: 'bun · typescript · react',
             desc: 'a small full-stack framework for bun — pages, APIs, and websockets with one command.',
             href: 'https://github.com/nemvince/axi',
+            name: 'axi',
+            tags: 'bun · typescript · react',
+            year: '2026',
         },
     ];
 
     const work = [
         {
+            detail: 'two 6-week summer internships, both earned through a national competition (top-12 both times). built an internal testing tool in python and a pyqt frontend from scratch, working in scrum with jira and gitlab.',
             period: '2024 & 2025',
             title: 'software developer intern, nokia',
-            detail: 'two 6-week summer internships, both earned through a national competition (top-12 both times). built an internal testing tool in python and a pyqt frontend from scratch, working in scrum with jira and gitlab.',
         },
         {
+            detail: 'designed and built a production-ready bakery management frontend with react and typescript.',
             period: '2023 — 2024',
             title: 'react frontend developer, freelance',
-            detail: 'designed and built a production-ready bakery management frontend with react and typescript.',
         },
     ];
 
     const wins = [
         {
+            detail: 'national competition in linux server administration, user management, and file systems.',
             period: '2023 — 2025',
             title: 'szeresd a pingvint — 1st, three times',
-            detail: 'national competition in linux server administration, user management, and file systems.',
         },
         {
+            detail: 'national competition configuring windows and linux servers and clients.',
             period: '2025',
             title: 'juniorskills, sysadmin — 1st',
-            detail: 'national competition configuring windows and linux servers and clients.',
         },
         {
+            detail: 'won for clean, maintainable code.',
             period: '2025',
             title: 'nokia spring hackathon — 1st',
-            detail: 'won for clean, maintainable code.',
         },
         {
+            detail: 'sziiv - national competition for innovative software by top high-school students.',
             period: '2026',
             title: 'szegedi innovatív — 1st',
-            detail: 'sziiv - national competition for innovative software by top high-school students.',
         },
     ];
 
-    const identity: { k: string; v: string; href?: string; copy?: boolean }[] = [
-        { k: 'location', v: 'budapest, hungary' },
-        { k: 'school', v: 'petrik lajos', href: 'https://petrik.hu' },
-        { k: 'email', v: 'hi@vnce.eu', copy: true },
-        { k: 'github', v: 'nemvince', href: 'https://github.com/nemvince' },
+    const identity: { key: string; value: string; href?: string; copy?: boolean }[] = [
+        { key: 'location', value: 'budapest, hungary' },
+        { href: 'https://petrik.hu', key: 'school', value: 'petrik lajos' },
+        { copy: true, key: 'email', value: 'hi@vnce.eu' },
+        { href: 'https://github.com/nemvince', key: 'github', value: 'nemvince' },
     ];
 
-    let openEntry = $state<string | null>(null);
+    let openEntry = $state<string | undefined>(undefined);
     const toggleEntry = (key: string) =>
-        (openEntry = openEntry === key ? null : key);
+        (openEntry = openEntry === key ? undefined : key);
 </script>
 
 <div class="mx-auto w-full max-w-2xl px-6 flex flex-col">
@@ -163,22 +163,22 @@
                 if we're talking about something interesting.
             </p>
             <dl class="text-sm flex flex-col gap-2 shrink-0 md:w-56">
-                {#each identity as row (row.k)}
+                {#each identity as row (row.key)}
                     <div class="flex justify-between gap-4">
-                        <dt class="text-muted">{row.k}</dt>
+                        <dt class="text-muted">{row.key}</dt>
                         <dd class="text-right">
                             {#if row.copy}
                                 <CopyButton class="inline-flex items-center gap-1">
                                     <MailboxIcon class="text-accent size-4" />
-                                    {row.v}
+                                    {row.value}
                                 </CopyButton>
                             {:else if row.href}
                                 <ExternalLink href={row.href} class="inline-flex items-center gap-1">
-                                    {#if row.k === 'github'}<GithubLogoIcon class="text-accent size-4" />{/if}
-                                    {row.v}
+                                    {#if row.key === 'github'}<GithubLogoIcon class="text-accent size-4" />{/if}
+                                    {row.value}
                                 </ExternalLink>
                             {:else}
-                                {row.v}
+                                {row.value}
                             {/if}
                         </dd>
                     </div>

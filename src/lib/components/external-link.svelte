@@ -4,7 +4,7 @@
     let { href, class: cls = '', children }: { href: string; class?: string; children: Snippet } = $props();
 
     let bounce = $state(false);
-    let timeout: ReturnType<typeof setTimeout>;
+    let timeout: ReturnType<typeof setTimeout> | undefined = undefined;
     const click = () => {
         bounce = true;
         clearTimeout(timeout);

@@ -1,7 +1,6 @@
 <script lang="ts">
-    import { getPosts } from '$lib/posts';
+    import { getPosts } from '$lib/utils/posts';
 
-    let { data } = $props();
     const posts = getPosts();
 </script>
 

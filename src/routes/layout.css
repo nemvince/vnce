@@ -4,27 +4,27 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-    --border: #e5e7eb;
-    --bg: #f8f7f4;
-    --fg: #1a1f2e;
-    --muted: #6b7280;
-    --accent: #64755f;
+  --border: #e5e7eb;
+  --bg: #f8f7f4;
+  --fg: #1a1f2e;
+  --muted: #6b7280;
+  --accent: #64755f;
 }
 
 .dark {
-    --border: #2a2a2a;
-    --bg: #0a0a0a;
-    --fg: #f5f5f5;
-    --muted: #a0a0a0;
-    --accent: #7c9082;
+  --border: #2a2a2a;
+  --bg: #0a0a0a;
+  --fg: #f5f5f5;
+  --muted: #a0a0a0;
+  --accent: #7c9082;
 }
 
 @theme {
-    --color-border: var(--border);
-    --color-bg: var(--bg);
-    --color-fg: var(--fg);
-    --color-muted: var(--muted);
-    --color-accent: var(--accent);
+  --color-border: var(--border);
+  --color-bg: var(--bg);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
 }
 
 @layer base {
@@ -40,7 +40,7 @@
     @apply bg-bg text-fg transition-colors duration-500;
   }
   :focus-visible {
-    @apply outline-2 outline-offset-2 outline-accent;
+    @apply outline-accent outline-2 outline-offset-2;
   }
   @media (prefers-reduced-motion: reduce) {
     html {
@@ -77,6 +77,7 @@
   border: 1px solid var(--color-border);
   border-radius: 0.5em;
   overflow: hidden;
+  margin-top: 1.25em;
 }
 .typeset .code-block pre {
   margin-block-start: 0;
@@ -136,10 +137,13 @@
   position: absolute;
   top: 0.5em;
   right: 0.5em;
-color: var(--color-muted);  padding: 0.25em;
+  color: var(--color-muted);
+  padding: 0.25em;
   border-radius: 0.25em;
   cursor: pointer;
-  transition: opacity 0.15s, color 0.15s;
+  transition:
+    opacity 0.15s,
+    color 0.15s;
 }
 
 .code-copy.copied {

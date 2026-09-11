@@ -1,55 +1,36 @@
 ---
 title: hello, world
 date: 2026-09-07
-description: the first post — why this site exists and what i plan to write about.
+description: the first post
 published: true
 ---
 
-this is the first post on my site. i've wanted a place to write things down for
-a while — stuff i figure out at 2am and then forget how i did three months later.
+more blogs soon, can't be bothered with writing right now. look at this sick code highlighting i implemented
 
-## what to expect
+```ts vite.config.ts
+import adapter from '@sveltejs/adapter-node'
+import { sveltekit } from '@sveltejs/kit/vite'
+import tailwindcss from '@tailwindcss/vite'
+import { mdsvex } from 'mdsvex'
+import { defineConfig } from 'vite'
+import { highlighter } from './src/lib/utils/highlight.ts'
 
-mostly technical notes. for example, the load function that powers this very blog index:
-
-```ts src/lib/posts.ts
-export const getPosts = (): Post[] => {
-    const files = import.meta.glob('/src/posts/*.md', { eager: true });
-    const posts: Post[] = [];
-
-    for (const path in files) {
-        const file = files[path];
-        const slug = path.split('/').pop()?.replace('.md', '');
-        if (file && typeof file === 'object' && 'metadata' in file && slug) {
-            const meta = file.metadata as Omit<Post, 'slug'>;
-            if (meta.published) {
-                posts.push({ ...meta, slug });
-            }
-        }
-    }
-
-    return posts.sort(
-        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-    );
-};
+export default defineConfig({
+  plugins: [
+    tailwindcss(),
+    sveltekit({
+      // Adapter-auto only supports some environments, see https://svelte.dev/docs/kit/adapter-auto for a list.
+      // If your environment is not supported, or you settled on a specific environment, switch out the adapter.
+      // See https://svelte.dev/docs/kit/adapters for more information about adapters.
+      adapter: adapter(),
+      compilerOptions: {
+        // Force runes mode for the project, except for libraries. Can be removed in svelte 6.
+        runes: ({ filename }) =>
+          filename.split(/[/\\]/).includes('node_modules') ? undefined : true
+      },
+      extensions: ['.svelte', '.svx', '.md'],
+      preprocess: [mdsvex({ extensions: ['.svx', '.md'], highlight: { highlighter } })]
+    })
+  ]
+})
 ```
-
-and a shell one, because setting this up was literally just:
-
-```sh
-bun add -d shiki
-```
-
-the plan is to write about:
-
-- how the petriktv kiosk pulls live data from BKK's GTFS feed
-- things i break in my proxmox home lab and how i fix them
-- lessons from competitions like szeresd a pingvint
-
-## why no comments
-
-no backend, no tracking, no cookie banners. if you want to respond, my email is
-one click away on the front page. honestly this is closer to how the old web
-felt, and i like it.
-
-more soon.

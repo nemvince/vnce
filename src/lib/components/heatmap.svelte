@@ -8,9 +8,9 @@
     } = $props();
 
     const getLastMonday = (start: Date): Date => {
-        const d = new Date(start);
-        d.setDate(d.getDate() - ((d.getDay() + 6) % 7));
-        return d;
+        const date = new Date(start);
+        date.setDate(date.getDate() - ((date.getDay() + 6) % 7));
+        return date;
     };
 
     // 5-step opaque ramp: faint muted wash → full accent
@@ -26,35 +26,40 @@
     type Day = { date: string; value: number; level: number } | undefined;
 
     // Quartile thresholds over nonzero days, so the ramp always uses all
-    // five steps regardless of how lopsided the distribution is.
+    // Five steps regardless of how lopsided the distribution is.
     const thresholds = (values: number[]): number[] => {
-        const sorted = values.filter((v) => v > 0).sort((a, b) => a - b);
-        if (sorted.length === 0) return [1, 2, 3, 4];
-        const q = (p: number) => sorted[Math.min(sorted.length - 1, Math.floor(p * sorted.length))];
-        return [q(0.25), q(0.5), q(0.75), sorted[sorted.length - 1]];
+        const sorted = values.filter((val) => val > 0).sort((va, vb) => va - vb);
+        if (sorted.length === 0) {return [1, 2, 3, 4];}
+        const quartile = (px: number) => sorted[Math.min(sorted.length - 1, Math.floor(px * sorted.length))];
+        return [quartile(0.25), quartile(0.5), quartile(0.75), sorted[sorted.length - 1]];
     };
 
-    const levelFor = (value: number, [t1, t2, t3, t4]: number[]): number =>
-        value <= 0 ? 0 : value <= t1 ? 1 : value <= t2 ? 2 : value <= t3 ? 3 : 4;
+    const levelFor = (value: number, [t1, t2, t3, t4]: number[]): number => {
+        if (value <= 0) {return 0;}
+        if (value <= t1) {return 1;}
+        if (value <= t2) {return 2;}
+        if (value <= t3) {return 3;}
+        return 4;
+    };
 
-    const buildCalendar = (year: number): { calendar: Day[][] } => {
-        const base = getLastMonday(new Date(year, 0, 1));
+    const buildCalendar = (yr: number): { calendar: Day[][] } => {
+        const base = getLastMonday(new Date(yr, 0, 1));
 
-        const raw: Day[][] = Array.from({ length: 7 }, (_, i) => {
+        const raw: Day[][] = Array.from({ length: 7 }, (_, idx) => {
             const start = new Date(base);
-            start.setDate(base.getDate() + i);
-            return Array.from({ length: 53 }, (_, j) => {
+            start.setDate(base.getDate() + idx);
+            return Array.from({ length: 53 }, (__, idx2) => {
                 const day = new Date(start);
-                day.setDate(start.getDate() + j * 7);
-                if (day.getFullYear() !== year) return undefined;
-                const date = day.toISOString().split('T')[0];
-                return { date, value: data[date] ?? 0, level: 0 };
+                day.setDate(start.getDate() + idx2 * 7);
+                if (day.getFullYear() !== yr) {return undefined;}
+                const [date] = day.toISOString().split('T');
+                return { date, level: 0, value: data[date] ?? 0 };
             });
         });
 
-        const levels = thresholds(raw.flat().map((d) => d?.value ?? 0));
+        const levels = thresholds(raw.flat().map((th) => th?.value ?? 0));
         for (const day of raw.flat()) {
-            if (day) day.level = levelFor(day.value, levels);
+            if (day) {day.level = levelFor(day.value, levels);}
         }
         return { calendar: raw };
     };

@@ -1,12 +1,25 @@
 <script lang="ts">
-	import favicon from "$lib/assets/favicon.svg";
-	import "./layout.css";
+	import { fade } from 'svelte/transition';
+	import { cubicIn, cubicOut } from 'svelte/easing';
 	import { ModeWatcher } from "mode-watcher";
+	import favicon from "$lib/assets/favicon.svg";
 	import Footer from "$lib/components/footer.svelte";
     import Header from "$lib/components/header.svelte";
+	import "./layout.css";
+    import { PUBLIC_UMAMI, PUBLIC_UMAMI_SCRIPT_URL, PUBLIC_UMAMI_WEBSITE_ID } from '$env/static/public';
+	
+	let { children, data } = $props();
+	const pathname = $derived(data.pathname)
 
-	let { children } = $props();
 </script>
+
+{#if PUBLIC_UMAMI !== '0' && PUBLIC_UMAMI !== 'false'}
+  <script
+    defer
+    src={PUBLIC_UMAMI_SCRIPT_URL}
+    data-website-id={PUBLIC_UMAMI_WEBSITE_ID}
+  ></script>
+{/if}
 
 <svelte:head>
 	<link rel="icon" href={favicon} />
@@ -25,6 +38,10 @@
 	<meta name="twitter:card" content="summary" />
 </svelte:head>
 <Header />
-<main class="grow flex flex-col">{@render children()}</main>
+{#key pathname}
+
+	<main in:fade={{ easing: cubicOut, duration: 150, delay: 250 }}
+		out:fade={{ easing: cubicIn, duration: 150 }} class="grow flex flex-col">{@render children()}</main>
+{/key}
 <Footer />
 <ModeWatcher disableTransitions={false} />

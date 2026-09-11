@@ -1,0 +1,38 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "unicorn", "oxc"],
+  "categories": {
+    "correctness": "error",
+    "perf": "error",
+    "style": "error",
+    "suspicious": "error"
+  },
+  "rules": {
+    "no-ternary": "off",
+    "no-magic-numbers": "off",
+    "sort-imports": "off",
+    "one-var": "off",
+    "id-length": [
+      "error",
+      {
+        "exceptions": ["_"]
+      }
+    ],
+    "new-cap": [
+      "error",
+      {
+        "capIsNewExceptions": ["NOT_FOUND"]
+      }
+    ],
+    "unicorn/no-array-sort": "off"
+  },
+  "env": {
+    "builtin": true
+  },
+  "overrides": [
+    {
+      "files": ["apps/web/src/routes/**"],
+      "rules": { "unicorn/filename-case": "off" }
+    }
+  ]
+}
