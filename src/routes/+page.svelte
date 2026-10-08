@@ -17,23 +17,26 @@
     const projects = [
         {
             desc: 'timetable and substitution manager for my school, plus an IoT door lock for classrooms. open source.',
-            href: 'https://github.com/filcdev/filc',
+            href: 'https://filc.petrik.hu',
+            source: 'https://github.com/filcdev/filc',
             name: 'filc',
             tags: 'typescript · react · iot',
             year: '2024',
         },
         {
-            desc: "a screen in the school hall showing daily substitutions and live public transport times, via BKK's GTFS feed.",
-            href: 'https://github.com/nemvince/petriktv',
-            name: 'petriktv',
-            tags: 'typescript · kiosk · gtfs',
-            year: '2024',
+            desc: "allows you to write and run code in many languages in a browser and share it with your students. powered by piston.",
+            href: 'https://codecast.vnce.eu',
+            source: 'https://github.com/nemvince/codecast',
+            name: 'codecast',
+            tags: 'typescript · piston · realtime',
+            year: '2026',
         },
         {
-            desc: 'a small full-stack framework for bun — pages, APIs, and websockets with one command.',
-            href: 'https://github.com/nemvince/axi',
-            name: 'axi',
-            tags: 'bun · typescript · react',
+            desc: 'a small mirror manager with statistics and auto-syncing, try at mirror.vnce.eu',
+            href: 'https://mirror.vnce.eu',
+            source: 'https://github.com/nemvince/mirrord',
+            name: 'mirrord',
+            tags: 'python · fastapi · sqlite',
             year: '2026',
         },
     ];
@@ -116,7 +119,11 @@
                     <div class="flex flex-col gap-1">
                         <h3 class="font-bold">
                             <ExternalLink href={p.href} class="inline-flex items-center gap-1">
-                                {p.name} <ArrowUpRightIcon class="text-accent size-3.5" />
+                                {p.name}
+                                <ExternalLink class="pl-1" href={p.source}>
+                                    <GithubLogoIcon class="hover:text-accent transition-colors text-muted size-3.5" />
+                                </ExternalLink>
+                                <ArrowUpRightIcon class="text-accent size-3.5" />
                             </ExternalLink>
                         </h3>
                         <p class="text-muted leading-relaxed">{p.desc}</p>
